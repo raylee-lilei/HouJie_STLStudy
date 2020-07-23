@@ -22,9 +22,9 @@
 
    $ git remote add origin  https://github.com/raylee-lilei/HouJie_STLStudy.git
 
-   ​		$ git remote -v   可以查看提交origin
+   ​		&emsp;$ git remote -v   可以查看提交origin
 
-   ​		$ git remote rm origin  可以删除重新提交
+   ​		&emsp;$ git remote rm origin  可以删除重新提交
    
    $  git push origin -u master
    
