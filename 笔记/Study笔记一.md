@@ -1,3 +1,3 @@
 # STL
 
-![](https://github.com/raylee-lilei/HouJie_STLStudy/image/cengcibianli.png)
+![](https://raw.githubusercontent.com/raylee-lilei/HouJie_STLStudy/master/image/cengcibianli.png)
