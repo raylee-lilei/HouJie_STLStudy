@@ -28,7 +28,15 @@
    
    $  git push origin -u master
    
-   
-   
-   
+4. 更新文件内容之后
+
+   $  git status
+
+   $ git add .
+
+   $ git commit -m  "update"
+
+   $ git pull --rebase origin master   //合并内容
+
+   $  git push origin -u master
 
