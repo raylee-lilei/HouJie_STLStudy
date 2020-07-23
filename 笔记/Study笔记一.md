@@ -1,3 +1,6 @@
 # STL
 
-![](https://raw.githubusercontent.com/raylee-lilei/HouJie_STLStudy/master/image/cengcibianli.png)
+![](https://github.com/raylee-lilei/HouJie_STLStudy/blob/master/image/cengcibianli.png)
+
+显示啊
+
