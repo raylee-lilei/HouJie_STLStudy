@@ -67,15 +67,15 @@ auto ite = :: find(c.begin(),c.end(),target);
 
 ### **循序容器**
 
-<u>**array：**  固定大小</u>
+***array：***    固定大小
 
-**vector：**单端扩充 ——  capacity分配容器大小成2倍增长（会造成空间浪费）   >  size 真正存放的元素个数
+**vector：**  单端扩充 ——  capacity分配容器大小成2倍增长（会造成空间浪费）   >  size 真正存放的元素个数
 
-**deque：**双端队列 ——一次扩充一个buffer，deque里面的指针，向前扩充指向一个buffer，向后扩充指向另一个buffer
+**deque：**  双端队列 ——一次扩充一个buffer，deque里面的指针，向前扩充指向一个buffer，向后扩充指向另一个buffer
 
-**list：**双向链表   ，节点分离的，不连续
+**list：**        双向链表   ，节点分离的，不连续
 
-<u>**forward-list：**单向链表</u>
+***forward-list：***         单向链表
 
 ### 关联容器（大量数据）
 
@@ -85,9 +85,9 @@ auto ite = :: find(c.begin(),c.end(),target);
 
 
 
-**Multiset :** key可以重复
+**Multiset :**   key可以重复
 
-**Multimap:**key可以重复     multimap<long,string> c     c.insert(pair<long,string>(i,buff))
+**Multimap:**  key可以重复     multimap<long,string> c     c.insert(pair<long,string>(i,buff))
 
 
 
@@ -97,11 +97,11 @@ auto ite = :: find(c.begin(),c.end(),target);
 
 
 
-*下划线是C++11新增加的*
+*斜体是C++11新增加的*
 
 
 
-## OOP面向对象和泛型编程GP
+### OOP面向对象和泛型编程GP
 
 OOP将数据和方法关联在一起 class   list  ，void   sort(),在类的内部，  不能使用全局来排序，list不连续，使用指针只能一个一个往下走，标准库中所提供的sort这个迭代器 需要一定的条件，list不满足，所以list不使用全局sort 排序，需要自己写
 
@@ -113,7 +113,7 @@ GP将数据和方法分开，容器和算法各自闭门造车 ，通过迭代�
 
 
 
-**泛化：**
+**泛化：**    用的时候才指定类型
 
 template <class type>
 
@@ -123,7 +123,7 @@ struct __type_traits{
 
 
 
-**特化：**
+**特化： **   特化就是限定死模板实现的具体类型
 
 template<> 
 
@@ -137,7 +137,7 @@ struct __type_traits<double>{
 
 }
 
-**偏特化：**
+**偏特化： **     模板如果有多个类型，那么就只限定为其中的一部分
 
 template<class T,class Alloc=alloc> 
 
@@ -165,13 +165,13 @@ struct iterator_traits<const T*>{
 
 
 
-**分配器allocators**
+## **分配器allocators**
 
 分配器调用operator new里面c 的malloc和free分配和释放内存
 
 迭代器的end 是最后一个元素的下一个
 
-**迭代器**
+## **迭代器**
 
 迭代器是容器和算法之间的桥梁，当算法想要寻找某一段的时候，就去询问迭代器，迭代器就回答算法的下面的问题
 
@@ -434,9 +434,352 @@ lower_bound（k）//k在容器中返回第一个出现这个值的位置。如�
 
 2.hashcode/buckets取余作为存放的位置。
 
-3.如果某个bucket下面的链表冲突数超过bucket的数，重新申请bucket为97（一般 为原来bucket的二倍附近的质数）。
+3.如果某个bucket下面的链表冲突数超过bucket的数，重新申请bucket(vector)为97（一般 为原来bucket的二倍附近的质数）。
 
 4.本来连接在bucket的所有元素重新打乱按照相同的方式计算这些元素存储的位置。
 
+```
 
+
+hashtable<const char* , 
+          const char *, 
+    hash<const char *>，
+identity<const char *>，
+                 eqstr,
+                 alloc>  ht(50,hash<const char *>()，eqstr());
+
+ht.insert_unique("lilei");
+```
+
+
+
+C++11  之后将hash_set,hash_multiset     hash_map,hash_multimap   更名为unordered_set,unordered_multiset    unordered_map,unordered_multimap
+
+
+
+## 算法
+
+算法看不见容器，独立分开的，各自闭门造车 。他所需要的一切信息都必须从迭代器取得，迭代器由容器提供
+
+iterator_cateegory分类：
+
+input_iterator_tag            output_iterator_tag
+
+farward_iterator_tag       单向链表  （继承于input_iterator_tag  ）
+
+bidirectional_iterator_tag      双向链表      （继承于farward_iterator_tag）
+
+random_access_iterator_tag     随机指针     （继承于bidirectional_iterator_tag  ）
+
+**子类 是一个父类**
+
+迭代器执行某一个运行算法时，先去问iterator_traits（），然后返回一个临时对象来确定是用哪个iterator_cateegory
+
+
+
+iterator_cateegory和type_traits 对算法有很重要的影响
+
+
+
+**accumulate**
+
+```
+
+
+template <class InputIterator,
+                     class  T>
+
+T  accumulate (InputIterator first,  InputIterator  last , T  init){}
+```
+
+
+
+```
+template <class InputIterator,
+
+                     class  T,
+
+        class BinaryOperation >
+
+T  accumulate (InputIterator first,  InputIterator  last , T  init , BinaryOperation   binary_op ){}
+```
+
+
+
+**for_each**     对一段内的元素做某一件事
+
+```
+template <class InputIterator,
+              class  Function>
+
+Function  accumulate (InputIterator first,  InputIterator  last , Function  f){}
+```
+
+**replace，replace_if, replace_copy**
+
+```
+template <class   ForwardIterator,
+                        class  T>
+
+void replace(ForwardIterator  first,
+
+              ForwardIterator  last,
+
+               const T&   old_value,
+
+               const  T&  new_value){}
+```
+
+
+
+**count**     **count_if**
+
+**find   find_if**
+
+**sort**（list 和forward_list 不存在这个sort函数，不接受跳跃性的指针）
+
+关联式容器不会调用这些类似于全局的函数，因为他们自己有这些函数，而且效率很高
+
+
+
+## functor仿函数
+
+只是为算法服务，以仿函数的形式去告诉算法，以我们自己形式去执行算法
+
+class  里面重载 (),这个class创建出来的对象就是函数对象或者仿函数
+
+```
+struct myclass{
+
+	bool operator()(int  i , int  j){
+
+	return i<j;
+
+	}
+
+}myobj;     //函数对象
+
+bool myfunc (int i,int j){return i<j;}   //仿函数
+
+
+sort(myvec.begin(),myvec.end(),myobj);
+sort(myvec.begin(),myvec.end(),myfunc);
+sort(myvec.begin(),myvec.end(),less<int>());
+
+template<class  T>
+struct less: public binary_function<T,T,bool>{
+	bool operator()(const T & x,const T & y)const{
+	return x<y;
+	}
+};
+
+```
+
+仿函数的可适配条件：自己写的functor最好继承适当的class，这个类就是适配器（unary_function      binary_function）
+
+类似于算法询问迭代器
+
+```
+template<class Operation>
+
+class binder2nd: public unary_function<typename Operation::first_argument_type,                                                                                                typename Operation::result_type>{
+
+protected:
+
+typename Operation::second_argument_type value;    //适配器询问问题，仿函数回答问题下面的三个参数
+
+}
+
+                typedef A1 first_argument_type
+                typedef A2 second_argument_type
+                typedef R result_type
+```
+
+
+
+## 适配器
+
+在已经实现好的函数例如（copy）上稍作修改（操作符重载），改成自己适配的形式
+
+类型（）===> 创建临时对象
+
+binder2nd<Operation>(op,arg2_type(x));
+
+```
+vector<int>  c  {12,3,4,5,6,77,23}
+
+class  classname {12,4}
+```
+
+copy  是开始的位置和结束的位置中间的值copy到另外一个空间的开始位置。必须要指定新的空间的大小不小于迭代的位置大小
+
+reverse_iterator
+
+inserter   中间插入
+
+istream_iterator  std::istream_iterator  <int>   iit(std::cin); //这句话创建之后，已经通过构造函数绑定了输入，可以直接输入了。
+
+ostream_iterator   std::ostream_iterator  <int>   out_it(std::cout, ",");
+
+
+
+## 标准库（STL 以外） 
+
+#### 一个万能的hash function
+
+参数可变模板  （n ===> 1  + n-1   ）
+
+```
+template <typename... Types>    //接任意个参数类型
+
+inline size_t  hash_val (const  Types &...  args){
+
+	size_t  seed  = 0;
+
+	hash_val(seed,args...);
+
+	return seed;
+
+}
+
+class CustomerHash{
+
+public:
+
+	size_t operator()(const Customer&  c) const{
+
+	return hash_val(c.fname,c.lname,c.no);
+
+	}
+
+}
+
+template <typename T,  typemame... Types>
+inline void hash_val (size_t& seed,
+  					const T& val,
+  					const Types&... args)
+{
+  	hash_combine(seed,val);
+    hash_val(seed,args...);
+}
+
+template<typename T>
+inline viod hash_val(size_t& seed,const T& val){
+	hash_combine(seed,val);
+}
+
+template<typename T>
+inline void hash_combine(size_t& seed,
+                          const T& val)
+{
+	seed ^= hash<T>()(val) + 0X9e3779b9+(seed<<6)+(seed>>2);
+}
+
+unordered_set<Customer,CustomerHash>  set;
+set.insert(Customer("lilei","li", 1));
+set.insert(Customer("ray","lee", 2));
+n = set.bucket_count()  // 篮子数
+
+CustomerHash  ch;
+ch(Customer("lilei","li", 1))%n;//通过hash计算之后得到的hashcode 在篮子中的位置
+```
+
+
+
+#### tuple
+
+任意类型组合
+
+3个参数继承两个参数继承1个参数
+
+```
+tuple<int,float,string> t (42,345.5,"lilei");
+
+
+tuple<int,float,string>    int m_head(42);
+
+tuple<float,string>    float m_head(345.5);
+
+tuple<string>    string m_head("lilei");
+
+template<typename Head,typename... Tail>
+class tuple<Head,Tail...>:private tuple<Tail...>{
+	typedef tuple<Tail...> inherited;
+public:
+	tuple(){}
+	tuple(Head v,Tail,,, vtaill):m_head(v),inherited(vtail...){}
+	typename Head::type head(){
+		return m_head;
+	}
+	inherited& tail(){
+		return *this;
+	}
+protected:
+	Head m_head;
+}
+```
+
+
+
+#### type traits
+
+自己实现的类，可以通过type traits知道类里面的很多属性
+
+是否是整型呢？是否有虚析构呢？是否是void呢？是否是类呢？——type traits会回答你
+
+```
+//泛化
+template<class type>
+
+struct __type_traits{
+typedef __false_type  has_trivial_default_constructor;    //默认重要
+typedef __false_type  has_trivial_copy_constructor;
+typedef __false_type  has_trivial_assignment_opoerator;
+typedef __false_type  has_trivial_destructor;
+typedef __false_type  is_POD_type;
+};
+
+//特化
+template<> 
+struct __type_traits<int>{
+typedef __true_type  has_trivial_default_constructor;    //默认重要
+typedef __true_type  has_trivial_copy_constructor;
+typedef __true_type  has_trivial_assignment_opoerator;
+typedef __true_type  has_trivial_destructor;
+typedef __true_type  is_POD_type;
+};
+
+//算法询问是否重要
+__type_traits<Foo>::has_trivial_destructor
+```
+
+classname (classname&&)    //move  constructor
+
+带有指针的才写析构函数
+
+extern  文件之外的可以看见他申明的这个
+
+
+
+#### moveable
+
+```
+char*  _data; //指针
+
+//copy 构造（深拷贝，两个空间，两个指针）
+Mystring(const MyString& str) : _len(str._len){
+	++CCtor;
+	_init_data(str._data);
+}
+
+//move 构造（拷贝一个指针之后把原来的指针置NULL，拷贝后的指针，指向原来的空间。相当于浅拷贝，只是把原来的指针删掉）
+MyString(MyString&& str) noexcept: _data(str._data),_len(str._len){
+	++MCtor;
+	str._len = 0;
+	str._data = NULL;
+}
+
+M c11(c1);      //耗时
+M c12(std::move(c1))      // 不耗时   一定不能再使用 c1 了
+```
 
