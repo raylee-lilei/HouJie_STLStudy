@@ -40,3 +40,4 @@
 
    $  git push origin -u master
 
+![image-20200730215735416](https://raw.githubusercontent.com/raylee-lilei/PicGoImage/master/imgimage-20200730215735416.png)
